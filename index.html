@@ -1,0 +1,2078 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>RN STORE - Rokok Premium Indonesia</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        /* RESET & BASE */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --black: #0a0a0a;
+            --dark: #111111;
+            --gray: #2a2a2a;
+            --light: #f5f5f5;
+            --gold: #d4af37;
+            --gold-light: #f7ef8a;
+            --red: #c41e3a;
+            --green: #25d366;
+            --blue: #2962ff;
+            --purple: #9c27b0;
+            --telegram: #0088cc;
+            --orange: #ff9800;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--black);
+            color: var(--light);
+            line-height: 1.6;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        section {
+            padding: 60px 0;
+        }
+        
+        /* BANNER SLIDER */
+        .banner-slider {
+            width: 100%;
+            height: 400px;
+            position: relative;
+            overflow: hidden;
+            margin-top: 80px;
+        }
+        
+        .banner-slide {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .banner-slide.active {
+            opacity: 1;
+        }
+        
+        .banner-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 0;
+        }
+        
+        .banner-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, rgba(0,0,0,0.8), rgba(0,0,0,0.4));
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .banner-title {
+            font-size: 3.5rem;
+            color: var(--gold);
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 10px rgba(0,0,0,0.8);
+            font-weight: 700;
+            font-family: 'Playfair Display', serif;
+            letter-spacing: 1px;
+        }
+        
+        .banner-subtitle {
+            font-size: 1.8rem;
+            color: white;
+            max-width: 800px;
+            margin-bottom: 10px;
+            text-shadow: 1px 1px 5px rgba(0,0,0,0.8);
+            font-weight: 400;
+        }
+        
+        .banner-tagline {
+            font-size: 1.2rem;
+            color: var(--gold-light);
+            max-width: 700px;
+            margin-top: 10px;
+            text-shadow: 1px 1px 5px rgba(0,0,0,0.8);
+            font-weight: 300;
+        }
+        
+        .slider-controls {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+            z-index: 10;
+        }
+        
+        .slider-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.5);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .slider-dot.active {
+            background: var(--gold);
+            transform: scale(1.3);
+        }
+        
+        .slider-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0,0,0,0.5);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 10;
+            border: 2px solid rgba(212, 175, 55, 0.5);
+        }
+        
+        .slider-nav:hover {
+            background: var(--gold);
+            color: var(--black);
+        }
+        
+        .slider-prev {
+            left: 20px;
+        }
+        
+        .slider-next {
+            right: 20px;
+        }
+        
+        /* HEADER - DESKTOP VERSION (SAMA PERSIS DENGAN KODE ASLI ANDA) */
+        .header {
+            background: rgba(10, 10, 10, 0.98);
+            backdrop-filter: blur(10px);
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            border-bottom: 2px solid rgba(212, 175, 55, 0.3);
+            box-shadow: 0 5px 30px rgba(0,0,0,0.5);
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            text-decoration: none;
+            flex-shrink: 0;
+        }
+        
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--gold), var(--orange));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            color: var(--black);
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+        
+        .logo-text {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--gold), var(--gold-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 1px;
+        }
+        
+        .logo-tagline {
+            font-size: 0.85rem;
+            color: #aaa;
+            margin-top: 2px;
+        }
+        
+        .nav-menu {
+            display: flex;
+            gap: 30px;
+        }
+        
+        .nav-menu a {
+            color: var(--light);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            position: relative;
+            font-size: 1rem;
+        }
+        
+        .nav-menu a:hover {
+            color: var(--gold);
+        }
+        
+        .nav-menu a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--gold);
+            transition: width 0.3s ease;
+        }
+        
+        .nav-menu a:hover::after {
+            width: 100%;
+        }
+        
+        .contact-info {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+        
+        .contact-buttons {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .request-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(135deg, var(--purple), #7b1fa2);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(156, 39, 176, 0.2);
+        }
+        
+        .whatsapp-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(135deg, var(--green), #128C7E);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(37, 211, 102, 0.2);
+        }
+        
+        .telegram-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(135deg, var(--telegram), #006699);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 136, 204, 0.2);
+        }
+        
+        .request-btn:hover, .whatsapp-btn:hover, .telegram-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+        }
+        
+        .phone-number {
+            color: var(--gold);
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        /* MOBILE MENU TOGGLE */
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: 2px solid var(--gold);
+            color: var(--gold);
+            width: 45px;
+            height: 45px;
+            border-radius: 10px;
+            font-size: 1.3rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* HERO SECTION */
+        .hero {
+            padding: 80px 0 60px;
+            text-align: center;
+            background: linear-gradient(135deg, rgba(10,10,10,0.95), rgba(26,26,26,0.95));
+            position: relative;
+            overflow: hidden;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 30% 50%, rgba(212, 175, 55, 0.05), transparent 70%),
+                        radial-gradient(circle at 70% 30%, rgba(196, 30, 58, 0.03), transparent 60%);
+            pointer-events: none;
+        }
+        
+        .hero-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: var(--gold);
+            line-height: 1.2;
+            text-shadow: 0 2px 20px rgba(212, 175, 55, 0.4);
+        }
+        
+        .hero-subtitle {
+            font-size: 1.2rem;
+            color: #ccc;
+            max-width: 700px;
+            margin: 0 auto 30px;
+            font-weight: 300;
+        }
+        
+        .promo-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--red), #ff3333);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-weight: 600;
+            margin: 20px 0;
+            border-left: 4px solid var(--gold);
+            animation: pulse 2s infinite;
+            box-shadow: 0 5px 20px rgba(196, 30, 58, 0.3);
+        }
+        
+        /* PRODUCTS SECTION */
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin: 0 0 50px;
+            color: var(--gold);
+            position: relative;
+            display: inline-block;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+            border-radius: 3px;
+        }
+        
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+        
+        .product-card {
+            background: var(--dark);
+            border-radius: 20px;
+            overflow: hidden;
+            text-align: center;
+            border: 2px solid rgba(212, 175, 55, 0.2);
+            transition: all 0.4s ease;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+        
+        .product-card:hover {
+            border-color: var(--gold);
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(212, 175, 55, 0.3);
+        }
+        
+        .product-image-container {
+            height: 220px;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.7), rgba(42, 42, 42, 0.9));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            border-radius: 18px 18px 0 0;
+            padding: 20px;
+        }
+        
+        .product-image-wrapper {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            border-radius: 12px;
+        }
+        
+        .product-image {
+            max-height: 180px;
+            max-width: 90%;
+            object-fit: contain;
+            transition: transform 0.7s ease;
+            border-radius: 8px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+            opacity: 1;
+        }
+        
+        .product-card:hover .product-image {
+            transform: scale(1.15) rotate(2deg);
+        }
+        
+        .product-content {
+            padding: 25px 20px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .product-name {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: white;
+            line-height: 1.3;
+        }
+        
+        .product-desc {
+            color: #aaa;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+            min-height: 40px;
+            line-height: 1.4;
+        }
+        
+        .product-price {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--gold);
+            margin: 15px 0 5px;
+            text-shadow: 0 2px 5px rgba(212, 175, 55, 0.3);
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.1), transparent);
+            padding: 8px 15px;
+            border-radius: 12px;
+            display: inline-block;
+        }
+        
+        .product-unit {
+            color: #aaa;
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+        
+        .product-order-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background: linear-gradient(135deg, var(--green), #128C7E);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            margin-top: 15px;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 0.95rem;
+        }
+        
+        .product-order-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(37, 211, 102, 0.3);
+        }
+        
+        .product-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: var(--red);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            z-index: 2;
+        }
+        
+        /* REQUEST PO SECTION */
+        .request-section {
+            background: linear-gradient(135deg, rgba(156, 39, 176, 0.05), rgba(10, 10, 10, 0.95));
+            border-top: 1px solid rgba(212, 175, 55, 0.1);
+            border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+        }
+
+        .request-container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .request-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+
+        .request-instruction {
+            background: rgba(17, 17, 17, 0.8);
+            padding: 40px;
+            border-radius: 20px;
+            border: 2px solid rgba(212, 175, 55, 0.3);
+        }
+
+        .steps-container {
+            max-width: 800px;
+            margin: 30px auto;
+        }
+
+        .step {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 30px;
+            gap: 20px;
+        }
+
+        .step-number {
+            background: linear-gradient(135deg, var(--purple), var(--blue));
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .step-content {
+            flex: 1;
+        }
+
+        .step-content h4 {
+            color: var(--gold);
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+        }
+
+        .step-content p {
+            color: #aaa;
+            font-size: 0.95rem;
+        }
+
+        .request-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+            margin: 30px 0;
+        }
+        
+        /* USP SECTION */
+        .usp-section {
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.05), rgba(10, 10, 10, 0.95));
+            border-top: 1px solid rgba(212, 175, 55, 0.1);
+            border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+        }
+        
+        .usp-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+        
+        .usp-card {
+            background: rgba(17, 17, 17, 0.8);
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .usp-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--gold);
+            box-shadow: 0 10px 30px rgba(212, 175, 55, 0.1);
+        }
+        
+        .usp-icon {
+            font-size: 2.5rem;
+            color: var(--gold);
+            margin-bottom: 20px;
+        }
+        
+        .usp-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: white;
+        }
+        
+        .usp-desc {
+            color: #aaa;
+            font-size: 0.95rem;
+        }
+        
+        /* PAYMENT SECTION */
+        .payment-section {
+            background: linear-gradient(135deg, rgba(37, 211, 102, 0.03), rgba(212, 175, 55, 0.03));
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .payment-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 70% 30%, rgba(37, 211, 102, 0.05), transparent 70%);
+            pointer-events: none;
+        }
+        
+        .payment-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+        
+        .payment-card {
+            background: var(--dark);
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+            border: 2px solid;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+        
+        .payment-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--blue), var(--green));
+            z-index: 2;
+        }
+        
+        .payment-card.enabled.special::before {
+            background: linear-gradient(90deg, var(--green), var(--gold));
+        }
+        
+        .payment-card.enabled {
+            border-color: rgba(41, 98, 255, 0.3);
+        }
+        
+        .payment-card.enabled.special {
+            border-color: rgba(37, 211, 102, 0.3);
+        }
+        
+        .payment-icon {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+        
+        .payment-card.enabled .payment-icon {
+            color: var(--blue);
+        }
+        
+        .payment-card.enabled.special .payment-icon {
+            color: var(--green);
+        }
+        
+        .payment-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+        
+        .bank-list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .bank-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            color: var(--gold-light);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .bank-item:hover {
+            background: rgba(212, 175, 55, 0.2);
+            transform: translateY(-2px);
+        }
+        
+        /* WARNING SECTION */
+        .warning-box {
+            background: rgba(196, 30, 58, 0.1);
+            border: 2px solid var(--red);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            margin: 40px 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .warning-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 20% 50%, rgba(196, 30, 58, 0.2), transparent 70%);
+            pointer-events: none;
+        }
+        
+        .warning-title {
+            color: var(--red);
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        
+        /* CTA SECTION */
+        .cta-section {
+            text-align: center;
+            padding: 80px 0;
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(10,10,10,0.95), rgba(26,26,26,0.95));
+        }
+        
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 50% 80%, rgba(212, 175, 55, 0.1), transparent 70%);
+            pointer-events: none;
+        }
+        
+        .cta-title {
+            font-size: 2.5rem;
+            color: var(--gold);
+            margin-bottom: 20px;
+            text-shadow: 0 2px 20px rgba(212, 175, 55, 0.4);
+        }
+        
+        .cta-subtitle {
+            color: #ccc;
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto 30px;
+            font-weight: 300;
+        }
+        
+        .whatsapp-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 15px;
+            background: linear-gradient(135deg, var(--green), #128C7E);
+            color: white;
+            padding: 20px 45px;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            text-decoration: none;
+            margin: 20px 0;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            box-shadow: 0 10px 30px rgba(37, 211, 102, 0.3);
+        }
+        
+        .whatsapp-cta::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.7s ease;
+            z-index: -1;
+        }
+        
+        .whatsapp-cta:hover::before {
+            left: 100%;
+        }
+        
+        .whatsapp-cta:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 20px 40px rgba(37, 211, 102, 0.5);
+        }
+        
+        /* FOOTER */
+        .footer {
+            background: var(--dark);
+            padding: 60px 0 30px;
+            text-align: center;
+            border-top: 1px solid rgba(212, 175, 55, 0.2);
+            position: relative;
+        }
+        
+        .footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+        }
+        
+        .footer-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .footer-logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            color: var(--gold);
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+        
+        .footer-tagline {
+            color: #aaa;
+            font-size: 1rem;
+            margin-bottom: 30px;
+            font-style: italic;
+        }
+        
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin: 30px 0;
+            text-align: left;
+        }
+        
+        .contact-item {
+            background: rgba(42, 42, 42, 0.5);
+            padding: 20px;
+            border-radius: 15px;
+            border-left: 3px solid var(--gold);
+        }
+        
+        .contact-title {
+            color: var(--gold);
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+        
+        .contact-detail {
+            color: #ccc;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 8px 0;
+        }
+        
+        .footer-warning {
+            color: var(--red);
+            font-size: 0.9rem;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(196, 30, 58, 0.3);
+            font-style: italic;
+        }
+        
+        .contact-icons {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+            justify-content: center;
+        }
+        
+        .contact-icon {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+        
+        .contact-icon.whatsapp {
+            background: var(--green);
+            color: white;
+        }
+        
+        .contact-icon.telegram {
+            background: var(--telegram);
+            color: white;
+        }
+        
+        .contact-icon.phone {
+            background: var(--gold);
+            color: var(--black);
+        }
+        
+        .contact-icon:hover {
+            transform: translateY(-5px);
+        }
+        
+        .request-buttons a {
+            width: 260px;
+            height: 56px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            white-space: nowrap;
+        }
+
+        .request-buttons i,
+        .request-buttons svg {
+            width: 18px;
+            height: 18px;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+        
+        /* BACK TO TOP BUTTON */
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: var(--gold);
+            color: var(--black);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 999;
+            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3);
+        }
+        
+        .back-to-top.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .back-to-top:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(212, 175, 55, 0.5);
+        }
+        
+        /* ANIMATIONS */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(196, 30, 58, 0.7);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+            70% {
+                box-shadow: 0 0 0 15px rgba(196, 30, 58, 0);
+            }
+            100% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(196, 30, 58, 0);
+            }
+        }
+        
+        @keyframes glow {
+            0%, 100% {
+                box-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
+            }
+            50% {
+                box-shadow: 0 0 20px rgba(212, 175, 55, 0.6);
+            }
+        }
+        
+        .fade-in {
+            opacity: 0;
+            animation: fadeInUp 0.8s ease forwards;
+        }
+        
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+        .delay-4 { animation-delay: 0.4s; }
+        .delay-5 { animation-delay: 0.5s; }
+        
+        /* CUSTOM SCROLLBAR */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: var(--dark);
+            border-radius: 10px;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, var(--gold), var(--gold-light));
+            border-radius: 10px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, var(--gold-light), var(--gold));
+        }
+        
+        /* ===== MOBILE OPTIMIZATION ===== */
+        @media (max-width: 1024px) {
+            .nav-menu {
+                gap: 20px;
+            }
+            
+            .nav-menu a {
+                font-size: 0.9rem;
+            }
+            
+            .contact-info {
+                display: none;
+            }
+            
+            .menu-toggle {
+                display: flex;
+            }
+            
+            .nav-menu {
+                display: none;
+            }
+            
+            .nav-menu.mobile-active {
+                display: flex;
+                flex-direction: column;
+                position: fixed;
+                top: 80px;
+                left: 0;
+                width: 100%;
+                background: rgba(10, 10, 10, 0.98);
+                backdrop-filter: blur(10px);
+                padding: 20px;
+                border-bottom: 2px solid var(--gold);
+                box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+                z-index: 999;
+                max-height: calc(100vh - 80px);
+                overflow-y: auto;
+                gap: 5px;
+            }
+            
+            .nav-menu.mobile-active a {
+                padding: 15px 20px;
+                margin: 3px 0;
+                background: rgba(212, 175, 55, 0.1);
+                border-radius: 10px;
+                border-left: 3px solid transparent;
+                font-size: 1rem;
+                text-align: left;
+            }
+            
+            .nav-menu.mobile-active a::after {
+                display: none;
+            }
+            
+            .nav-menu.mobile-active a:hover,
+            .nav-menu.mobile-active a:active {
+                border-left-color: var(--gold);
+                background: rgba(212, 175, 55, 0.2);
+                transform: translateX(5px);
+            }
+            
+            .nav-menu.mobile-active .mobile-contact {
+                display: block;
+                margin-top: 20px;
+                padding-top: 20px;
+                border-top: 1px solid rgba(212, 175, 55, 0.3);
+            }
+            
+            .nav-menu.mobile-active .contact-buttons-mobile {
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+                margin-bottom: 10px;
+            }
+            
+            .nav-menu.mobile-active .contact-btn-mobile {
+                width: 100%;
+                justify-content: center;
+                padding: 12px;
+                font-size: 0.95rem;
+                border-radius: 10px;
+                text-decoration: none;
+                font-weight: 600;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+            }
+            
+            .nav-menu.mobile-active .btn-request-mobile {
+                background: linear-gradient(135deg, var(--purple), #7b1fa2);
+                color: white;
+            }
+            
+            .nav-menu.mobile-active .btn-wa-mobile {
+                background: linear-gradient(135deg, var(--green), #128C7E);
+                color: white;
+            }
+            
+            .nav-menu.mobile-active .btn-telegram-mobile {
+                background: linear-gradient(135deg, var(--telegram), #006699);
+                color: white;
+            }
+            
+            .nav-menu.mobile-active .phone-number-mobile {
+                color: var(--gold);
+                font-size: 0.9rem;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 8px;
+                background: rgba(212, 175, 55, 0.1);
+                padding: 12px;
+                border-radius: 10px;
+                border: 1px solid rgba(212, 175, 55, 0.3);
+                margin-top: 10px;
+            }
+            
+            .banner-slider {
+                margin-top: 80px;
+                height: 350px;
+            }
+            
+            .banner-title {
+                font-size: 2.5rem;
+            }
+            
+            .banner-subtitle {
+                font-size: 1.3rem;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .banner-slider {
+                height: 300px;
+            }
+            
+            .banner-title {
+                font-size: 2rem;
+            }
+            
+            .banner-subtitle {
+                font-size: 1.1rem;
+            }
+            
+            .banner-tagline {
+                font-size: 0.9rem;
+            }
+            
+            .slider-nav {
+                width: 40px;
+                height: 40px;
+            }
+            
+            .hero-title {
+                font-size: 1.8rem;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+            
+            .logo-icon {
+                width: 45px;
+                height: 45px;
+                font-size: 1.5rem;
+            }
+            
+            .logo-text {
+                font-size: 1.5rem;
+            }
+            
+            .products-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 15px;
+            }
+            
+            .product-image-container {
+                height: 150px;
+            }
+            
+            .product-content {
+                padding: 15px;
+            }
+            
+            .product-name {
+                font-size: 1rem;
+            }
+            
+            .product-desc {
+                font-size: 0.8rem;
+                min-height: 30px;
+            }
+            
+            .product-price {
+                font-size: 1.3rem;
+            }
+            
+            .product-order-btn {
+                padding: 8px 12px;
+                font-size: 0.8rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .banner-slider {
+                height: 250px;
+            }
+            
+            .banner-title {
+                font-size: 1.5rem;
+            }
+            
+            .banner-subtitle {
+                font-size: 1rem;
+            }
+            
+            .hero {
+                padding: 50px 0 40px;
+            }
+            
+            .hero-title {
+                font-size: 1.5rem;
+            }
+            
+            .hero-subtitle {
+                font-size: 0.9rem;
+            }
+            
+            .section-title {
+                font-size: 1.5rem;
+            }
+            
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .product-image-container {
+                height: 180px;
+            }
+            
+            .promo-badge {
+                padding: 10px 20px;
+                font-size: 0.85rem;
+            }
+            
+            .whatsapp-cta {
+                padding: 15px 30px;
+                font-size: 1rem;
+            }
+            
+            .cta-title {
+                font-size: 1.8rem;
+            }
+            
+            .contact-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .footer-logo {
+                font-size: 1.8rem;
+            }
+            
+            .footer-warning {
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- HEADER - SAMA PERSIS DENGAN KODE ASLI ANDA -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="#home" class="logo">
+                    <div class="logo-icon">
+                        <i class="fas fa-store"></i>
+                    </div>
+                    <div>
+                        <div class="logo-text">RN STORE</div>
+                        <div class="logo-tagline"> Rokok Indonesia</div>
+                    </div>
+                </a>
+                
+                <!-- DESKTOP NAVIGATION -->
+                <nav class="nav-menu" id="navMenu">
+                    <a href="#home">Home</a>
+                    <a href="#produk">Produk</a>
+                    <a href="#request">Request PO</a>
+                    <a href="#keunggulan">Keunggulan</a>
+                    <a href="#kontak">Kontak</a>
+                    
+                    <!-- MOBILE CONTACT (HIDDEN ON DESKTOP) -->
+                    <div class="mobile-contact" style="display: none;">
+                        <div class="contact-buttons-mobile">
+                            <a href="#request" class="contact-btn-mobile btn-request-mobile">
+                                <i class="fas fa-cart-plus"></i> Request PO
+                            </a>
+                            <a href="https://wa.me/62811610061?text=Halo%20RN%20STORE,%20saya%20mau%20order%20rokok%20premium" 
+                               class="contact-btn-mobile btn-wa-mobile" target="_blank">
+                                <i class="fab fa-whatsapp"></i> WhatsApp
+                            </a>
+                            <a href="https://wa.me/62811610061?text=Halo%20RN%20STORE,%20saya%20mau%20order%20rokok%20premium" 
+                               class="contact-btn-mobile btn-wa-mobile" target="_blank">
+                                <i class="fab fa-whatsapp"></i> WhatsApp
+                            </a>
+                        </div>
+                        <div class="phone-number-mobile">
+                            <i class="fas fa-phone-alt"></i> +62811610061
+                        </div>
+                    </div>
+                </nav>
+                
+                <!-- DESKTOP CONTACT -->
+                <div class="contact-info">
+                    <div class="contact-buttons">
+                        <a href="#request" class="request-btn">
+                            <i class="fas fa-cart-plus"></i> Request PO
+                        </a>
+                        <a href="https://wa.me/62811610061?text=Halo%20RN%20STORE,%20saya%20mau%20order%20rokok%20premium" 
+                           class="whatsapp-btn" target="_blank">
+                            <i class="fab fa-whatsapp"></i> WhatsApp 1
+                        </a>
+                        <a href="https://wa.me/855967098370?text=Halo%20RN%20STORE,%20saya%20mau%20order%20rokok%20premium" 
+                           class="whatsapp-btn" target="_blank">
+                            <i class="fab fa-whatsapp"></i> WhatsApp 2
+                        </a>
+                    </div>
+                    <div class="phone-number">
+                        <i class="fas fa-phone-alt"></i> +62811610061
+                    </div>
+                </div>
+                
+                <!-- MOBILE MENU TOGGLE -->
+                <button class="menu-toggle" id="menuToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+    
+    <!-- BANNER SLIDER -->
+    <div class="banner-slider" id="bannerSlider">
+        <div class="banner-slide active">
+            <img src="https://i.postimg.cc/NLhnFm00/1324sdfsdf.png" alt="RN STORE Banner" class="banner-image">
+            <div class="banner-overlay">
+            </div>
+        </div>
+    </div>
+    
+    <!-- PRODUCTS SECTION - LENGKAP 15 PRODUK -->
+    <section id="produk" class="products-section">
+        <div class="container">
+            <h2 class="section-title fade-in">PRODUK KAMI</h2>
+            <p style="text-align: center; color: #ccc; margin-bottom: 40px; font-size: 1.1rem;">
+                Nikmati kemudahan pembayaran yang fleksibel hanya di RN STORE
+            </p>
+            <p style="text-align: center; color: #ccc; margin-bottom: 40px; font-size: 1.1rem;">
+                BAYAR PAS GAJIAN / UANG MAKAN
+            </p>
+            
+            
+            <div class="products-grid">
+                <!-- Product 1 - Sampoerna Mild 16 -->
+                <div class="product-card fade-in">
+                    <div class="product-badge">HOT</div>
+                    <div class="product-image-container">
+                        <div class="product-image-wrapper">
+                            <img src="https://www.static-src.com/wcsstore/Indraprastha/images/catalog/medium/catalog-image/111/MTA-159499191/sampoerna_rokok-sampoerna-mild_full01.jpg" 
+                                 alt="Sampoerna Mild 16" class="product-image">
+                        </div>
+                    </div>
+                    <div class="product-content">
+                        <h3 class="product-name">Sampoerna Mild 16</h3>
+                        <p class="product-desc">Rasa mild dengan kualitas terbaik dari Sampoerna</p>
+                        <div>
+                            <div class="product-price">1,200฿</div>
+                            <div class="product-unit">/ Slop</div>
+                        </div>
+                        <a href="https://wa.me/62811610061?text=Halo%20RN%20STORE,%20saya%20mau%20order%20Sampoerna%20Mild%2016" 
+                           class="product-order-btn" target="_blank">
+                            <i class="fab fa-whatsapp"></i> Order Now
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Product 2 - Sampoerna Mild Menthol -->
+                <div class="product-card fade-in delay-1">
+                    <div class="product-badge">NEW</div>
+                    <div class="product-image-container">
+                        <div class="product-image-wrapper">
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbtj3mFLZyI9ubARp2I-OKKfUdsMmbAe5GfQ&s" 
+                                 alt="Sampoerna Mild Menthol" class="product-image">
+                        </div>
+                    </div>
+                    <div class="product-content">
+                        <h3 class="product-name">Sampoerna Mild Menthol</h3>
+                        <p class="product-desc">Sensasi menthol yang menyegarkan dengan kualitas premium</p>
+                        <div>
+                            <div class="product-price">1,200฿</div>
+                            <div class="product-unit">/ Slop</div>
+                        </div>
+                        <a href="https://wa.me/62811610061?text=Halo%20RN%20STORE,%20saya%20mau%20order%20Sampoerna%20Mild%20Menthol" 
+                           class="product-order-btn" target="_blank">
+                            <i class="fab fa-whatsapp"></i> Order Now
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Product 3 - LA Bold 20 -->
+                <div class="product-card fade-in delay-1">
+                    <div class="product-badge">NEW</div>
+                    <div class="product-image-container">
+                        <div class="product-image-wrapper">
+                            <img src="https://arti-assets.sgp1.cdn.digitaloceanspaces.com/megaswalayan/products/a77a849c-5a29-4aad-9623-119f3b71ff5f.jpg" 
+                                 alt="LA Bold 20" class="product-image">
+                        </div>
+                    </div>
+                    <div class="product-content">
+                        <h3 class="product-name">LA Bold 20</h3>
+                        <p class="product-desc">Sensasi kualitas premium</p>
+                        <div>
+                            <div class="product-price">1,300฿</div>
+                            <div class="product-unit">/ Slop</div>
+                        </div>
+                        <a href="https://wa.me/62811610061?text=Halo%20RN%20STORE,%20saya%20mau%20order%20LA%20Bold%2020" 
+                           class="product-order-btn" target="_blank">
+                            <i class="fab fa-whatsapp"></i> Order Now
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Product 4 - Sampoerna Evolution -->
+                <div class="product-card fade-in delay-2">
+                    <div class="product-image-container">
+                        <div class="product-image-wrapper">
+                            <img src="https://www.static-src.com/wcsstore/Indraprastha/images/catalog/medium/MTA-50171870/sampoerna_sampoerna_avolution_merah_rokok_-20_batang-_10_pcs-_slop-_full03_fgxz7h19.jpeg" 
+                                 alt="Sampoerna Evolution" class="product-image">
+                        </div>
+                    </div>
+                    <div class="product-content">
+                        <h3 class="product-name">Sampoerna Evolution</h3>
+                        <p class="product-desc">Evolusi rasa dengan teknologi terkini dari Sampoerna</p>
+                        <div>
+                            <div class="product-price">1,350฿</div>
+                            <div class="product-unit">/ Slop</div>
+                        </div>
+                        <a href="https://wa.me/62811610061?text=Halo%20RN%20STORE,%20saya%20mau%20order%20Sampoerna%20Evolution" 
+                           class="product-order-btn" target="_blank">
+                            <i class="fab fa-whatsapp"></i> Order Now
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Product 5 - Marlboro Merah -->
+                <div class="product-card fade-in delay-3">
+                    <div class="product-badge">POPULAR</div>
+                    <div class="product-image-container">
+                        <div class="product-image-wrapper">
+                            <img src="https://miro.medium.com/v2/resize:fit:1400/1*FQ2qwoaNXdubTAVp4do6ag.png" 
+                                 alt="Marlboro Merah" class="product-image">
+                        </div>
+                    </div>
+                    <div class="product-content">
+                        <h3 class="product-name">Marlboro Merah</h3>
+                        <p class="product-desc">Klasik dunia dengan rasa penuh karakter dan kualitas internasional</p>
+                        <div>
+                            <div class="product-price">1,500฿</div>
+                            <div class="product-unit">/ Slop</div>
+                        </div>
+                        <a href="https://wa.me/62811610061?text=Halo%20RN%20STORE,%20saya%20mau%20order%20Marlboro%20Merah" 
+                           class="product-order-btn" target="_blank">
+                            <i class="fab fa-whatsapp"></i> Order Now
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Product 6 - Marlboro Black Filter 20 -->
+                <div class="product-card fade-in delay-3">
+                    <div class="product-badge">POPULAR</div>
+                    <div class="product-image-container">
+                        <div class="product-image-wrapper">
+                            <img src="https://arti-assets.sgp1.cdn.digitaloceanspaces.com/megaswalayan/products/670d7777-8020-4cdd-ad8d-4125cb00aafc.jpg" 
+                                 alt="Marlboro Black Filter 20" class="product-image">
+                        </div>
+                    </div>
+                    <div class="product-content">
+                        <h3 class="product-name">Marlboro Black Filter 20</h3>
+                        <p class="product-desc">Klasik dunia dengan rasa penuh karakter dan kualitas internasional</p>
+                        <div>
+                            <div class="product-price">1,200฿</div>
+                            <div class="product-unit">/ Slop</div>
+                        </div>
+                        <a href="https://wa.me/62811610061?text=Halo%20RN%20STORE,%20saya%20mau%20order%20Marlboro%20Black%20Filter%2020" 
+                           class="product-order-btn" target="_blank">
+                            <i class="fab fa-whatsapp"></i> Order Now
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Product 7 - LA Ice Purpleboost -->
+                <div class="product-card fade-in delay-4">
+                    <div class="product-image-container">
+                        <div class="product-image-wrapper">
+                            <img src="https://image.astronauts.cloud/product-images/2025/7/8991906102009LAIcePurpleBoostRokok_412669b4-a7d1-4e50-9f23-540de61515c9_900x900.png" 
+                                 alt="LA Ice Purpleboost" class="product-image">
+                        </div>
+                    </div>
+                    <div class="product-content">
+                        <h3 class="product-name">LA Ice Purpleboost</h3>
+                        <p class="product-desc">Sensasi es dengan rasa buah ungu yang menyegarkan</p>
+                        <div>
+                            <div class="product-price">1,200฿</div>
+                            <div class="product-unit">/ Slop</div>
+                        </div>
+                        <a href="https://wa.me/62811610061?text=Halo%20RN%20STORE,%20saya%20mau%20order%20LA%20Ice%20Purpleboost" 
+                           class="product-order-btn" target="_blank">
+                            <i class="fab fa-whatsapp"></i> Order Now
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Product 8 - LA Ice Manggoboost -->
+                <div class="product-card fade-in delay-5">
+                    <div class="product-image-container">
+                        <div class="product-image-wrapper">
+                            <img src="https://arti-assets.sgp1.cdn.digitaloceanspaces.com/megaswalayan/products/30194e45-68e6-478e-960d-7eeff38b86aa.jpg" 
+                                 alt="LA Ice Manggoboost" class="product-image">
+                        </div>
+                    </div>
+                    <div class="product-content">
+                        <h3 class="product-name">LA Ice Manggoboost</h3>
+                        <p class="product-desc">Kombinasi es dan rasa mangga yang unik dan menyegarkan</p>
+                        <div>
+                            <div class="product-price">1,200฿</div>
+                            <div class="product-unit">/ Slop</div>
+                        </div>
+                        <a href="https://wa.me/62811610061?text=Halo%20RN%20STORE,%20saya%20mau%20order%20LA%20Ice%20Manggoboost" 
+                           class="product-order-btn" target="_blank">
+                            <i class="fab fa-whatsapp"></i> Order Now
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Product 9 - Surya Gudang Garam 16 -->
+                <div class="product-card fade-in">
+                    <div class="product-image-container">
+                        <div class="product-image-wrapper">
+                            <img src="https://image.astronauts.cloud/product-images/2025/10/8998989110167GudangGaramSuryaBoxFilterRokokBatang16stick_62be00f7-06fe-43d9-bc93-26e90d9c62ad_900x900.png" 
+                                 alt="Surya Gudang Garam 16" class="product-image">
+                        </div>
+                    </div>
+                    <div class="product-content">
+                        <h3 class="product-name">Surya Gudang Garam 16</h3>
+                        <p class="product-desc">Klasik dengan cita rasa khas Indonesia dari Gudang Garam</p>
+                        <div>
+                            <div class="product-price">1,200฿</div>
+                            <div class="product-unit">/ Slop</div>
+                        </div>
+                        <a href="https://wa.me/62811610061?text=Halo%20RN%20STORE,%20saya%20mau%20order%20Surya%20Gudang%20Garam%2016" 
+                           class="product-order-btn" target="_blank">
+                            <i class="fab fa-whatsapp"></i> Order Now
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Product 10 - Lucky Strike -->
+                <div class="product-card fade-in delay-1">
+                    <div class="product-image-container">
+                        <div class="product-image-wrapper">
+                            <img src="https://ik.imagekit.io/dcjlghyytp1/c42be686934bd7042ab6f8c9f0025043?tr=f-auto,w-360" 
+                                 alt="Lucky Strike" class="product-image">
+                        </div>
+                    </div>
+                    <div class="product-content">
+                        <h3 class="product-name">Lucky Strike</h3>
+                        <p class="product-desc">Rasa klasik dengan kualitas internasional yang konsisten</p>
+                        <div>
+                            <div class="product-price">1,050฿</div>
+                            <div class="product-unit">/ Slop</div>
+                        </div>
+                        <a href="https://wa.me/62811610061?text=Halo%20RN%20STORE,%20saya%20mau%20order%20Lucky%20Strike" 
+                           class="product-order-btn" target="_blank">
+                            <i class="fab fa-whatsapp"></i> Order Now
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Product 11 - Lucky Strike Menthol -->
+                <div class="product-card fade-in delay-2">
+                    <div class="product-image-container">
+                        <div class="product-image-wrapper">
+                            <img src="https://image.astronauts.cloud/product-images/2023/12/LuckyStrikeCoolSwitchBoxFilter20S_bffebc30-eb54-4515-b7c3-604cf8268a78_900x900.png" 
+                                 alt="Lucky Strike Menthol" class="product-image">
+                        </div>
+                    </div>
+                    <div class="product-content">
+                        <h3 class="product-name">Lucky Strike Menthol</h3>
+                        <p class="product-desc">Sensasi menthol yang menyegarkan dengan kualitas Lucky Strike</p>
+                        <div>
+                            <div class="product-price">1,200฿</div>
+                            <div class="product-unit">/ Slop</div>
+                        </div>
+                        <a href="https://wa.me/62811610061?text=Halo%20RN%20STORE,%20saya%20mau%20order%20Lucky%20Strike%20Menthol" 
+                           class="product-order-btn" target="_blank">
+                            <i class="fab fa-whatsapp"></i> Order Now
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Product 12 - Magnum Black Filter -->
+                <div class="product-card fade-in delay-3">
+                    <div class="product-image-container">
+                        <div class="product-image-wrapper">
+                            <img src="https://image.astronauts.cloud/product-images/2024/2/DjiSamSoeSuperPremiumMagnumBlackBoxFilter12stick_2cc3d252-3d57-463e-8773-ae30b2194980_900x900.png" 
+                                 alt="Magnum Black Filter" class="product-image">
+                        </div>
+                    </div>
+                    <div class="product-content">
+                        <h3 class="product-name">Magnum Black Filter</h3>
+                        <p class="product-desc">Kelas premium dengan filter hitam dan rasa yang khas</p>
+                        <div>
+                            <div class="product-price">1,000฿</div>
+                            <div class="product-unit">/ Slop</div>
+                        </div>
+                        <a href="https://wa.me/62811610061?text=Halo%20RN%20STORE,%20saya%20mau%20order%20Magnum%20Black%20Filter" 
+                           class="product-order-btn" target="_blank">
+                            <i class="fab fa-whatsapp"></i> Order Now
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Product 13 - Esse Double Change -->
+                <div class="product-card fade-in delay-4">
+                    <div class="product-image-container">
+                        <div class="product-image-wrapper">
+                            <img src="https://image.astronauts.cloud/product-images/2024/6/Essechangedouble20stc_bf12e676-4c89-4bf3-b10a-c1767b821887_900x900.jpg" 
+                                 alt="Esse Double Change" class="product-image">
+                        </div>
+                    </div>
+                    <div class="product-content">
+                        <h3 class="product-name">Esse Double Change</h3>
+                        <p class="product-desc">Dua rasa dalam satu dengan pengalaman yang unik</p>
+                        <div>
+                            <div class="product-price">1,350฿</div>
+                            <div class="product-unit">/ Slop</div>
+                        </div>
+                        <a href="https://wa.me/62811610061?text=Halo%20RN%20STORE,%20saya%20mau%20order%20Esse%20Double%20Change" 
+                           class="product-order-btn" target="_blank">
+                            <i class="fab fa-whatsapp"></i> Order Now
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Product 14 - Esse Berry Pop -->
+                <div class="product-card fade-in delay-5">
+                    <div class="product-image-container">
+                        <div class="product-image-wrapper">
+                            <img src="https://image.astronauts.cloud/product-images/2025/11/8997032821302EsseBerryPopRokok_5066a2ff-6b0d-4c8e-9326-67261d11238a_900x900.png" 
+                                 alt="Esse Berry Pop" class="product-image">
+                        </div>
+                    </div>
+                    <div class="product-content">
+                        <h3 class="product-name">Esse Berry Pop</h3>
+                        <p class="product-desc">Rasa berry yang segar dengan sensasi pop yang unik</p>
+                        <div>
+                            <div class="product-price">1,200฿</div>
+                            <div class="product-unit">/ Slop</div>
+                        </div>
+                        <a href="https://wa.me/62811610061?text=Halo%20RN%20STORE,%20saya%20mau%20order%20Esse%20Berry%20Pop" 
+                           class="product-order-btn" target="_blank">
+                            <i class="fab fa-whatsapp"></i> Order Now
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Product 15 - Esse Punch Pop -->
+                <div class="product-card fade-in">
+                    <div class="product-image-container">
+                        <div class="product-image-wrapper">
+                            <img src="https://image.astronauts.cloud/product-images/2025/12/8999168211330EssePunchPopFilterRokokBatang16Sticks_fb9b1f01-74f7-48a1-affd-ef5e612b35ab_900x900.png" 
+                                 alt="Esse Punch Pop" class="product-image">
+                        </div>
+                    </div>
+                    <div class="product-content">
+                        <h3 class="product-name">Esse Punch Pop</h3>
+                        <p class="product-desc">Sensasi punch yang kuat dengan rasa yang menyegarkan</p>
+                        <div>
+                            <div class="product-price">1,200฿</div>
+                            <div class="product-unit">/ Slop</div>
+                        </div>
+                        <a href="https://wa.me/62811610061?text=Halo%20RN%20STORE,%20saya%20mau%20order%20Esse%20Punch%20Pop" 
+                           class="product-order-btn" target="_blank">
+                            <i class="fab fa-whatsapp"></i> Order Now
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 40px;">
+                <p style="color: var(--gold); font-size: 1.2rem; margin-bottom: 15px;">
+                    <i class="fas fa-boxes"></i> Total 15 Produk Premium Siap Kirim!
+                </p>
+                <p style="color: #aaa; font-size: 0.95rem;">
+                    Semua harga dalam satuan Baht Thailand. Harga dapat berubah sewaktu-waktu.
+                </p>
+            </div>
+        </div>
+    </section>
+    
+    
+    <!-- FOOTER -->
+    <footer id="kontak" class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">RN STORE</div>
+                <p class="footer-tagline">Rokok Indonesia - Poipet City</p>
+                
+                <div class="contact-grid">
+                    <div class="contact-item">
+                        <h3 class="contact-title">Kontak Utama</h3>
+                        <div class="contact-detail">
+                            <i class="fab fa-whatsapp" style="color: var(--green);"></i>
+                            <span>WhatsApp: +62812-8893-5380</span>
+                        </div>
+                        <div class="contact-detail">
+                            <i class="fab fa-whatsapp" style="color: var(--green);"></i>
+                            <span>WhatsApp: +855967098370</span>
+                        </div>
+                        <div class="contact-detail">
+                            <i class=" " style="color: var(--gold);"></i>
+                            <span> </span>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-item">
+                        <h3 class="contact-title">Request PO</h3>
+                        <div class="contact-detail">
+                            <i class="fas fa-cart-plus" style="color: var(--purple);"></i>
+                            <span>Request rokok khusus</span>
+                        </div>
+                        <div class="contact-detail">
+                            <i class="fas fa-search" style="color: var(--gold);"></i>
+                            <span>Cari merek apapun</span>
+                        </div>
+                        <a href="https://wa.me/62811610061?text=Halo%20RN%20STORE,%20saya%20mau%20request%20PO%20rokok%20khusus" 
+                           class="request-btn" style="margin-top: 15px; display: block; text-align: center;">
+                            <i class="fas fa-cart-plus"></i> Request Sekarang
+                        </a>
+                    </div>
+                    
+                    <div class="contact-item">
+                        <h3 class="contact-title">Lokasi & Pengiriman</h3>
+                        <div class="contact-detail">
+                            <i class="fas fa-map-marker-alt" style="color: var(--gold);"></i>
+                            <span>Poipet City, Kamboja</span>
+                        </div>
+                        <div class="contact-detail">
+                            <i class="fas fa-shipping-fast" style="color: var(--purple);"></i>
+                            <span>Pengiriman Cepat ke seluruh Poipet</span>
+                        </div>
+                        <div class="contact-detail">
+                            <i class="fas fa-clock" style="color: var(--green);"></i>
+                            <span>Buka 24 Jam</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <p class="footer-warning fade-in">
+                    <i class="fas fa-exclamation-circle"></i> PERINGATAN: Hanya untuk usia 21 tahun ke atas. 
+                    Merokok dapat menyebabkan kanker, serangan jantung, impotensi, gangguan kehamilan dan janin, 
+                    serta penyakit pernapasan kronis. Berhenti merokok sekarang juga akan mengurangi risiko terhadap kesehatan.
+                </p>
+                
+                <p style="color: #666; font-size: 0.8rem; margin-top: 30px;">
+                    &copy; 2023 RN STORE. All rights reserved. | Premium Rokok Indonesia
+                </p>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- BACK TO TOP BUTTON -->
+    <div class="back-to-top" id="backToTop">
+        <i class="fas fa-chevron-up"></i>
+    </div>
+    
+    <!-- JAVASCRIPT -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize animations
+            const fadeElements = document.querySelectorAll('.fade-in');
+            fadeElements.forEach((el, index) => {
+                el.style.animationDelay = `${index * 0.1}s`;
+            });
+            
+            // Back to top button
+            const backToTop = document.getElementById('backToTop');
+            
+            window.addEventListener('scroll', function() {
+                if (window.pageYOffset > 300) {
+                    backToTop.classList.add('active');
+                } else {
+                    backToTop.classList.remove('active');
+                }
+            });
+            
+            backToTop.addEventListener('click', function() {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
+            
+            // Smooth scrolling for navigation links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    const href = this.getAttribute('href');
+                    if (href !== '#') {
+                        e.preventDefault();
+                        const targetId = this.getAttribute('href');
+                        if (targetId === '#home') {
+                            window.scrollTo({
+                                top: 0,
+                                behavior: 'smooth'
+                            });
+                        } else {
+                            const targetElement = document.querySelector(targetId);
+                            if (targetElement) {
+                                window.scrollTo({
+                                    top: targetElement.offsetTop - 80,
+                                    behavior: 'smooth'
+                                });
+                            }
+                        }
+                    }
+                });
+            });
+            
+            // Banner Slider Functionality
+            const slides = document.querySelectorAll('.banner-slide');
+            const dots = document.querySelectorAll('.slider-dot');
+            const prevBtn = document.getElementById('prevSlide');
+            const nextBtn = document.getElementById('nextSlide');
+            let currentSlide = 0;
+            
+            function showSlide(n) {
+                slides.forEach(slide => {
+                    slide.classList.remove('active');
+                });
+                dots.forEach(dot => {
+                    dot.classList.remove('active');
+                });
+                
+                currentSlide = (n + slides.length) % slides.length;
+                slides[currentSlide].classList.add('active');
+                dots[currentSlide].classList.add('active');
+            }
+            
+            function nextSlide() {
+                showSlide(currentSlide + 1);
+            }
+            
+            function prevSlide() {
+                showSlide(currentSlide - 1);
+            }
+            
+            if (prevBtn) prevBtn.addEventListener('click', prevSlide);
+            if (nextBtn) nextBtn.addEventListener('click', nextSlide);
+            
+            dots.forEach((dot, index) => {
+                dot.addEventListener('click', () => {
+                    showSlide(index);
+                });
+            });
+            
+            setInterval(nextSlide, 5000);
+            
+            // MOBILE MENU TOGGLE
+            const menuToggle = document.getElementById('menuToggle');
+            const navMenu = document.getElementById('navMenu');
+            
+            if (menuToggle) {
+                menuToggle.addEventListener('click', function() {
+                    navMenu.classList.toggle('mobile-active');
+                    
+                    // Show/hide mobile contact section
+                    const mobileContact = navMenu.querySelector('.mobile-contact');
+                    if (mobileContact) {
+                        if (navMenu.classList.contains('mobile-active')) {
+                            mobileContact.style.display = 'block';
+                        } else {
+                            mobileContact.style.display = 'none';
+                        }
+                    }
+                    
+                    // Change icon
+                    const icon = menuToggle.querySelector('i');
+                    if (navMenu.classList.contains('mobile-active')) {
+                        icon.classList.remove('fa-bars');
+                        icon.classList.add('fa-times');
+                    } else {
+                        icon.classList.remove('fa-times');
+                        icon.classList.add('fa-bars');
+                    }
+                });
+            }
+            
+            // Close menu when clicking a link
+            document.querySelectorAll('.nav-menu a').forEach(link => {
+                link.addEventListener('click', function() {
+                    if (navMenu.classList.contains('mobile-active')) {
+                        navMenu.classList.remove('mobile-active');
+                        const mobileContact = navMenu.querySelector('.mobile-contact');
+                        if (mobileContact) {
+                            mobileContact.style.display = 'none';
+                        }
+                        const icon = menuToggle.querySelector('i');
+                        icon.classList.remove('fa-times');
+                        icon.classList.add('fa-bars');
+                    }
+                });
+            });
+            
+            // Handle window resize
+            window.addEventListener('resize', function() {
+                if (window.innerWidth > 1024) {
+                    if (navMenu.classList.contains('mobile-active')) {
+                        navMenu.classList.remove('mobile-active');
+                        const mobileContact = navMenu.querySelector('.mobile-contact');
+                        if (mobileContact) {
+                            mobileContact.style.display = 'none';
+                        }
+                        const icon = menuToggle.querySelector('i');
+                        icon.classList.remove('fa-times');
+                        icon.classList.add('fa-bars');
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
